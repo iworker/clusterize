@@ -1,0 +1,14 @@
+language: php
+sudo: false
+
+matrix:
+  include:
+    - php: 7.2
+
+before_install:
+  - phpize
+  - ./configure
+
+install: make install
+
+script: make test
