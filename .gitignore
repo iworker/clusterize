@@ -1,3 +1,4 @@
+.idea
 .deps
 *.lo
 *.la
@@ -31,6 +32,7 @@ mkinstalldirs
 modules
 run-tests.php
 tags
+cmake-build-debug
 .lvimrc
 
 *.diff
