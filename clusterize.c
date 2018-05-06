@@ -55,7 +55,9 @@ PHP_FUNCTION(clusterize)
 
   Point *points = (Point *) ecalloc(n, sizeof(Point));
 
-  for (uint32_t i = 0; i < n; ++i)
+  uint32_t i;
+
+  for (i = 0; i < n; ++i)
   {
     convert_to_double(&Z_ARRVAL(Z_ARRVAL_P(source_vectors)->arData[i].val)->arData[0].val);
     convert_to_double(&Z_ARRVAL(Z_ARRVAL_P(source_vectors)->arData[i].val)->arData[1].val);
@@ -78,8 +80,6 @@ PHP_FUNCTION(clusterize)
   config.clusters = ecalloc(config.num_objs, sizeof(int));
   config.clusters_sizes = ecalloc(config.k, sizeof(int));
   Point *init = ecalloc(config.k, sizeof(Point));
-
-  int i;
 
   for (i = 0; i < config.num_objs; ++i)
   {
