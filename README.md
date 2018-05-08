@@ -3,6 +3,22 @@
 # clusterize
 PHP extension for clustering points on GEO map
 
+# Installation
+
+1. Compile extension:
+```
+git clone git@github.com:iworker/clusterize.git
+cd clusterize
+phpize
+./configure --enable-clusterize
+make
+sudo make install
+```
+2. Add to php.ini:
+```
+extension=clusterize.so
+```
+
 # kmeans
 K-Means algorithm based on https://github.com/pramsey/kmeans/ library
 
