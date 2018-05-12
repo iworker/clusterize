@@ -1,6 +1,15 @@
 language: php
 sudo: false
 
+env:
+  global:
+    - TEST_PHP_ARGS="-q -g XFAIL,FAIL,BORK,WARN,LEAK,SKIP --show-diff"
+
+addons:
+  apt:
+    packages:
+      - lcov
+
 matrix:
   include:
     - php: 7.2
@@ -8,9 +17,13 @@ matrix:
     - php: 7.0
 
 before_install:
+  - pip install --user cpp-coveralls
   - phpize
-  - ./configure
+  - ./configure --enable-gcov 
 
 install: make install
 
 script: make test
+
+after_success:
+  - coveralls --exclude tests --gcov-options '\-lp'
