@@ -26,13 +26,12 @@
 static void update_r(kmeans_config *config)
 {
   int i;
+  double distance, curr_distance;
+  int cluster, curr_cluster;
+  Pointer obj;
 
   for (i = 0; i < config->num_objs; ++i)
   {
-    double distance, curr_distance;
-    int cluster, curr_cluster;
-    Pointer obj;
-
     obj = config->objs[i];
 
     /*
@@ -80,7 +79,7 @@ static void update_means(kmeans_config *config)
 
 kmeans_result kmeans(kmeans_config *config)
 {
-  int iterations = 0;
+  int iterations;
   int *clusters_last;
   size_t clusters_sz = sizeof(int) * config->num_objs;
   size_t clusters_size_sz = sizeof(int) * config->k;
@@ -105,6 +104,7 @@ kmeans_result kmeans(kmeans_config *config)
    */
   clusters_last = kmeans_malloc(clusters_sz);
 
+  iterations = 0;
   while(1)
   {
     /* Store the previous state of the clustering */

@@ -39,29 +39,32 @@ zend_module_entry clusterize_module_entry = {
     STANDARD_MODULE_PROPERTIES
 };
 
-ZEND_GET_MODULE(clusterize);
+ZEND_GET_MODULE(clusterize)
 
 PHP_FUNCTION(clusterize)
 {
-  zval *source_vectors;
+  zval *source_vectors, *point, *lat, *lon, clusters, values;
   zend_long clusters_count;
+  uint32_t i, n, r, part_size;
+  Point *points, *init;
+  kmeans_config config;
+  kmeans_result result;
+  HashTable *coordinates;
+  HashPosition pos;
 
   if (zend_parse_parameters(2 TSRMLS_CC, "al", &source_vectors, &clusters_count) == FAILURE) {
     RETURN_FALSE;
   }
 
-  uint32_t n = Z_ARRVAL_P(source_vectors)->nNumOfElements;
+  n = Z_ARRVAL_P(source_vectors)->nNumOfElements;
 
   if (n == 0 || clusters_count == 0) {
     RETURN_FALSE;
   }
 
-  Point *points = (Point *) ecalloc(n, sizeof(Point));
+  points = (Point *) ecalloc(n, sizeof(Point));
 
-  uint32_t i = 0;
-  zval *point;
-  HashPosition pos;
-
+  i = 0;
   ZEND_HASH_FOREACH_VAL(Z_ARRVAL_P(source_vectors), point)
   {
     if (Z_TYPE_P(point) != IS_ARRAY)
@@ -76,10 +79,10 @@ PHP_FUNCTION(clusterize)
       RETURN_FALSE;
     }
 
-    HashTable *coordinates = HASH_OF(point);
+    coordinates = HASH_OF(point);
 
-    zval *lat = zend_hash_index_find(coordinates, 0);
-    zval *lon = zend_hash_index_find(coordinates, 1);
+    lat = zend_hash_index_find(coordinates, 0);
+    lon = zend_hash_index_find(coordinates, 1);
 
     if (lat == NULL || lon == NULL)
     {
@@ -98,9 +101,6 @@ PHP_FUNCTION(clusterize)
     ++i;
   } ZEND_HASH_FOREACH_END();
 
-  kmeans_config config;
-  kmeans_result result;
-
   config.k = (uint32_t) clusters_count;
   config.num_objs = n;
   config.max_iterations = 200;
@@ -111,18 +111,18 @@ PHP_FUNCTION(clusterize)
   config.centers = ecalloc(config.k, sizeof(Pointer));
   config.clusters = ecalloc(config.num_objs, sizeof(int));
   config.clusters_sizes = ecalloc(config.k, sizeof(int));
-  Point *init = ecalloc(config.k, sizeof(Point));
+  init = ecalloc(config.k, sizeof(Point));
 
   for (i = 0; i < config.num_objs; ++i)
   {
     config.objs[i] = &(points[i]);
   }
 
-  int part_size = lroundf(config.num_objs / config.k);
+  part_size = lroundf(config.num_objs / config.k);
 
   for (i = 0; i < config.k; ++i)
   {
-    int r = i * part_size + lround(part_size * (1.0 * rand() / RAND_MAX));
+    r = i * part_size + lround(part_size * (1.0 * rand() / RAND_MAX));
 
     init[i] = points[r];
 
@@ -145,8 +145,6 @@ PHP_FUNCTION(clusterize)
 
   array_init_size(return_value, 2);
 
-  zval clusters;
-
   array_init_size(&clusters, config.k);
 
   for (i = 0; i < config.k; ++i)
@@ -164,8 +162,6 @@ PHP_FUNCTION(clusterize)
   }
 
   add_next_index_zval(return_value, &clusters);
-
-  zval values;
 
   array_init_size(&values, config.num_objs);
 
