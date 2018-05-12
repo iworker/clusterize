@@ -53,12 +53,30 @@ PHP_FUNCTION(clusterize)
 
   uint32_t n = Z_ARRVAL_P(source_vectors)->nNumOfElements;
 
+  if (n == 0 || clusters_count == 0) {
+    RETURN_FALSE;
+  }
+
   Point *points = (Point *) ecalloc(n, sizeof(Point));
 
   uint32_t i;
 
   for (i = 0; i < n; ++i)
   {
+    if (Z_TYPE_P(&Z_ARRVAL_P(source_vectors)->arData[i].val) != IS_ARRAY)
+    {
+      efree(points);
+      RETURN_FALSE;
+    }
+
+    uint32_t count = Z_ARRVAL(Z_ARRVAL_P(source_vectors)->arData[i].val)->nNumOfElements;
+
+    if (count != 2)
+    {
+      efree(points);
+      RETURN_FALSE;
+    }
+
     convert_to_double(&Z_ARRVAL(Z_ARRVAL_P(source_vectors)->arData[i].val)->arData[0].val);
     convert_to_double(&Z_ARRVAL(Z_ARRVAL_P(source_vectors)->arData[i].val)->arData[1].val);
 
