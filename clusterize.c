@@ -6,7 +6,6 @@
 
 #include "php.h"
 #include "clusterize.h"
-#include "points.h"
 
 #if HAVE_CLUSTERIZE
 
@@ -45,7 +44,7 @@ ZEND_GET_MODULE(clusterize);
 PHP_FUNCTION(clusterize)
 {
   zval *source_vectors;
-  zval *clusters_count;
+  zend_long clusters_count;
 
   if (zend_parse_parameters(2 TSRMLS_CC, "al", &source_vectors, &clusters_count) == FAILURE) {
     RETURN_FALSE;

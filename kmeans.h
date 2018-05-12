@@ -22,6 +22,7 @@
 #define KMEANS_H
 
 #include <stdlib.h>
+#include "php.h"
 
 /*
  * When clustering lists with NULL elements, they will get this as
@@ -35,8 +36,8 @@
  */
 #define KMEANS_MAX_ITERATIONS 1000
 
-#define kmeans_malloc(size) malloc(size)
-#define kmeans_free(ptr) free(ptr)
+#define kmeans_malloc(size) emalloc(size)
+#define kmeans_free(ptr) efree(ptr)
 
 typedef void* Pointer;
 
