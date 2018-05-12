@@ -21,60 +21,42 @@ $count_of_clusters = 3;
 
 list ($clusters, $points_by_clusters) = clusterize($points, $count_of_clusters);
 
-var_dump($clusters);
+$expected_clusters = [
+  [ 47.578373, -122.315363, 3 ],
+  [ 47.621756, -122.343266, 5 ],
+  [ 47.627063, -122.299743, 3 ],
+];
 
-var_dump($points_by_clusters);
+$success = 0;
+
+foreach ($clusters as $cluster) {
+  foreach ($expected_clusters as $expected_cluster) {
+    if (abs($cluster[0] - $expected_cluster[0]) < 0.0001 && 
+        abs($cluster[1] - $expected_cluster[1]) < 0.0001 && 
+        $cluster[2] == $expected_cluster[2]) {
+      ++$success;
+      break;
+    }
+  }
+}
+
+// success equals 3 means that all 3 expected points found in result clusters
+var_dump($success);
+
+// all these checks equals true means that all the points are in the correct cluster
+var_dump(($points_by_clusters[0] === $points_by_clusters[4]) &&
+         ($points_by_clusters[4] === $points_by_clusters[9]));
+
+var_dump(($points_by_clusters[1] === $points_by_clusters[5]) &&
+         ($points_by_clusters[5] === $points_by_clusters[7]));
+
+var_dump(($points_by_clusters[2] === $points_by_clusters[3]) &&
+         ($points_by_clusters[3] === $points_by_clusters[6]) &&
+         ($points_by_clusters[6] === $points_by_clusters[8]) &&
+         ($points_by_clusters[8] === $points_by_clusters[10]));
+
 --EXPECT--
-array(3) {
-  [0]=>
-  array(3) {
-    [0]=>
-    float(47.578373333333)
-    [1]=>
-    float(-122.31536333333)
-    [2]=>
-    float(3)
-  }
-  [1]=>
-  array(3) {
-    [0]=>
-    float(47.621756)
-    [1]=>
-    float(-122.343266)
-    [2]=>
-    float(5)
-  }
-  [2]=>
-  array(3) {
-    [0]=>
-    float(47.627063333333)
-    [1]=>
-    float(-122.29974333333)
-    [2]=>
-    float(3)
-  }
-}
-array(11) {
-  [0]=>
-  int(0)
-  [1]=>
-  int(2)
-  [2]=>
-  int(1)
-  [3]=>
-  int(1)
-  [4]=>
-  int(0)
-  [5]=>
-  int(2)
-  [6]=>
-  int(1)
-  [7]=>
-  int(2)
-  [8]=>
-  int(1)
-  [9]=>
-  int(0)
-  [10]=>
-  int(1)
-}
+int(3)
+bool(true)
+bool(true)
+bool(true)
