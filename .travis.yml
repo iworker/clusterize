@@ -19,7 +19,7 @@ matrix:
 before_install:
   - pip install --user cpp-coveralls
   - phpize
-  - ./configure --enable-gcov 
+  - ./configure --enable-coverage
 
 install: make install
 

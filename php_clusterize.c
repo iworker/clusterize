@@ -5,7 +5,7 @@
 #define HAVE_CLUSTERIZE 1
 
 #include "php.h"
-#include "clusterize.h"
+#include "php_clusterize.h"
 
 #if HAVE_CLUSTERIZE
 

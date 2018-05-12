@@ -30,6 +30,7 @@ Makefile.objects
 missing
 mkinstalldirs
 modules
+coverage
 run-tests.php
 tags
 cmake-build-debug
