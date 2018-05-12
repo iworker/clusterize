@@ -118,11 +118,11 @@ PHP_FUNCTION(clusterize)
     config.objs[i] = &(points[i]);
   }
 
-  part_size = lroundf(config.num_objs / config.k);
+  part_size = (uint32_t) floor(config.num_objs / config.k);
 
   for (i = 0; i < config.k; ++i)
   {
-    r = i * part_size + lround(part_size * (1.0 * rand() / RAND_MAX));
+    r = (uint32_t) (i * part_size + floor(part_size * (1.0 * rand() / RAND_MAX)));
 
     init[i] = points[r];
 

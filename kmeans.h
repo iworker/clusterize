@@ -82,7 +82,7 @@ typedef struct kmeans_config
   Pointer *objs;
 
   /* Number of objects in the preceding array */
-  size_t num_objs;
+  uint32_t num_objs;
 
   /*
    * An array of initial centers for the algorithm
