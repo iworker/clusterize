@@ -1,0 +1,5 @@
+ARG_ENABLE("clusterize", "enable clusterize extension", "no");
+
+if (PHP_CLUSTERIZE != "no") {
+    EXTENSION("clusterize", "clusterize.c kmeans.c points.c");
+}

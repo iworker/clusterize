@@ -1,4 +1,5 @@
 [![Build Status](https://travis-ci.org/iworker/clusterize.svg?branch=master)](https://travis-ci.org/iworker/clusterize)
+[![Windows Build status](https://ci.appveyor.com/api/projects/status/db0k8h3f4n263nat?svg=true)](https://ci.appveyor.com/project/iworker/clusterize)
 
 # clusterize
 PHP extension for clustering points on GEO map
