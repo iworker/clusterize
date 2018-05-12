@@ -59,30 +59,45 @@ PHP_FUNCTION(clusterize)
 
   Point *points = (Point *) ecalloc(n, sizeof(Point));
 
-  uint32_t i;
+  uint32_t i = 0;
+  zval *point;
+  HashPosition pos;
 
-  for (i = 0; i < n; ++i)
+  ZEND_HASH_FOREACH_VAL(Z_ARRVAL_P(source_vectors), point)
   {
-    if (Z_TYPE_P(&Z_ARRVAL_P(source_vectors)->arData[i].val) != IS_ARRAY)
+    if (Z_TYPE_P(point) != IS_ARRAY)
     {
       efree(points);
       RETURN_FALSE;
     }
 
-    uint32_t count = Z_ARRVAL(Z_ARRVAL_P(source_vectors)->arData[i].val)->nNumOfElements;
-
-    if (count != 2)
+    if (Z_ARRVAL_P(point)->nNumOfElements != 2)
     {
       efree(points);
       RETURN_FALSE;
     }
 
-    convert_to_double(&Z_ARRVAL(Z_ARRVAL_P(source_vectors)->arData[i].val)->arData[0].val);
-    convert_to_double(&Z_ARRVAL(Z_ARRVAL_P(source_vectors)->arData[i].val)->arData[1].val);
+    HashTable *coordinates = HASH_OF(point);
 
-    points[i].x = Z_DVAL(Z_ARRVAL(Z_ARRVAL_P(source_vectors)->arData[i].val)->arData[0].val);
-    points[i].y = Z_DVAL(Z_ARRVAL(Z_ARRVAL_P(source_vectors)->arData[i].val)->arData[1].val);
-  }
+    zval *lat = zend_hash_index_find(coordinates, 0);
+    zval *lon = zend_hash_index_find(coordinates, 1);
+
+    if (lat == NULL || lon == NULL)
+    {
+      efree(points);
+      RETURN_FALSE;
+    }
+
+    convert_to_double(lat);
+    convert_to_double(lon);
+
+    points[i].x = Z_DVAL_P(lat);
+    points[i].y = Z_DVAL_P(lon);
+
+    zend_hash_move_forward_ex(Z_ARRVAL_P(source_vectors), &pos);
+
+    ++i;
+  } ZEND_HASH_FOREACH_END();
 
   kmeans_config config;
   kmeans_result result;
