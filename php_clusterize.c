@@ -56,7 +56,7 @@ PHP_FUNCTION(clusterize)
     RETURN_FALSE;
   }
 
-  n = Z_ARRVAL_P(source_vectors)->nNumOfElements;
+  n = zend_hash_num_elements(Z_ARRVAL_P(source_vectors));
 
   if (n == 0 || clusters_count == 0) {
     RETURN_FALSE;
@@ -73,7 +73,7 @@ PHP_FUNCTION(clusterize)
       RETURN_FALSE;
     }
 
-    if (Z_ARRVAL_P(point)->nNumOfElements != 2)
+    if (zend_hash_num_elements(Z_ARRVAL_P(point)) != 2)
     {
       efree(points);
       RETURN_FALSE;
