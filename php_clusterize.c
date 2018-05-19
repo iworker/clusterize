@@ -122,7 +122,11 @@ PHP_FUNCTION(clusterize)
 
   for (i = 0; i < config.k; ++i)
   {
+#ifdef PHP_WIN32
+    r = (uint32_t) (i * part_size + floor(0.5 + part_size * (1.0 * rand() / RAND_MAX)));
+#else
     r = (uint32_t) (i * part_size + floor(part_size * (1.0 * rand() / RAND_MAX)));
+#endif
 
     init[i] = points[r];
 
