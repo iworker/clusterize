@@ -36,12 +36,12 @@ tags
 cmake-build-debug
 .lvimrc
 
-*.diff
-*.exp
-*.log
-*.out
-*.mem
-*.php
+tests/*.diff
+tests/*.exp
+tests/*.log
+tests/*.out
+tests/*.mem
+tests/*.php
 .*
 !.gitignore
 !.github/

@@ -153,7 +153,7 @@ PHP_FUNCTION(clusterize)
 
   for (i = 0; i < config.k; ++i)
   {
-    zval *cluster_center = emalloc(sizeof(zval *));
+    zval *cluster_center = emalloc(3 * sizeof(zval *));
     array_init_size(cluster_center, 3);
 
     add_next_index_double(cluster_center, init[i].x);

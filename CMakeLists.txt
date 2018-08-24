@@ -14,7 +14,7 @@ execute_process (
         OUTPUT_VARIABLE PHP_SOURCE
 )
 
-# set(PHP_SOURCE /usr/local/Cellar/php/7.2.4_1/include/php)
+#  set(PHP_SOURCE /usr/local/Cellar/php/7.2.9_2/include/php)
 
 include_directories(${PHP_SOURCE}/main)
 include_directories(${PHP_SOURCE}/Zend)
