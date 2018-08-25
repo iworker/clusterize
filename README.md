@@ -47,7 +47,7 @@ list ($clusters, $points_by_clusters) = clusterize($points, $count_of_clusters);
 
 ### real life example
 
-Let's imagine that there are 3 clusters of points on map in Seattle:
+Let's imagine there are 3 clusters of points on map in Seattle:
 
 [![3 clusters in Seattle](https://raw.githubusercontent.com/iworker/clusterize/assets/map001.png)](https://drive.google.com/open?id=1JEVJFMpGEaF5nYbsBms7J_ZDLtSMR8of&usp=sharing)
 
